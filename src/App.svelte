@@ -1,33 +1,46 @@
 <script>
-	import {scale} from 'svelte/transition';
-	import {flip} from 'svelte/animate';
+	import { fade, scale } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
  let array = [0, 1, 2, 3, 4];
 
- let returned='';
+ let returned = '';
 
  function pop() {
-	 returned=array.pop();
-	 array=array
+	 returned = array.pop();
+	 array=array;
  }
 
  function push() {
-	 returned=array.push(array[array.length - 1] + 1);
-	 array=array
+	 if (array.length > 0) {
+	 	returned = array.push(array[array.length - 1] + 1);
+	 	array = array
+	 } else {
+		returned = array.push(0);
+		array = array;
+	 }
  }
 
  function shift() {
-	 returned=array.shift();
-	 array=array
+	 returned = array.shift();
+	 array = array;
  }
 
  function unshift() {
-	 returned=array.unshift(array[0]-1);
-	 array=array
+	 if (array.length > 0) {
+		returned = array.unshift(array[0] - 1);
+		array = array;
+	 } else {
+		returned = array.unshift(0);
+		array = array; 
+	 }
  }
 
 </script>
 
 <style>
+	:global(body) {
+		color: #000;
+	}
 
 	h1 {
 		color: #4E7;
@@ -40,6 +53,7 @@
 	.array {
 		display: flex;
 		gap: .25em;
+		height: 3em;
 	}
 
 	.element {
@@ -80,10 +94,11 @@
 <h3>array:</h3>
 <div class= "array">
 	{#each array as element, i (element)}
-		<div animate:flip transition:scale class="element">{element}</div>
+		<div animate:flip="{{ duration: 300 }}" out:scale="{{ duration: 250 }}" in:scale="{{ duration: 250 }}" class="element">{element}</div>
 	{/each}
 </div>
 <h3>returned:</h3>
+
 <div class="returned">
 	{returned}
 </div>
